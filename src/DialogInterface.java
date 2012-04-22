@@ -105,7 +105,7 @@ public class DialogInterface implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if(jPanelManual.isVisible() && !StringUtils.isEmpty(textField2.getText())){
+		if(jPanelManual.isVisible() && !isEmpty(textField2.getText())){
 			frame.add(textPanel(), 1);
 			jPanelManual.setVisible(false);
 			userName = textField2.getText();
@@ -153,4 +153,7 @@ public class DialogInterface implements ActionListener {
 	public String getTextAreaText(){
 		return textArea.getText();
 	}
+	public static boolean isEmpty(String str) {
+	      return str == null || str.length() == 0;
+	 }
 }
