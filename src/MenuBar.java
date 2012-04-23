@@ -20,6 +20,7 @@ import javax.swing.JRadioButtonMenuItem;
 
 public class MenuBar extends JMenuBar {
 	final JFileChooser fc = new JFileChooser();
+	static JRadioButtonMenuItem userChosenAction;
 
 	public MenuBar() {
 
@@ -36,7 +37,8 @@ public class MenuBar extends JMenuBar {
 		JMenuItem saveAction = new JMenuItem("Salvesta");
 		JMenuItem exitAction = new JMenuItem("Lahku");
 		ButtonGroup group = new ButtonGroup();
-		JRadioButtonMenuItem userChosenAction = new JRadioButtonMenuItem("Nimi");
+		userChosenAction = new JRadioButtonMenuItem("Kasutaja");
+		userChosenAction.setSelected(true);
 		JRadioButtonMenuItem agentChosenAction = new JRadioButtonMenuItem("Agent");
 		group.add(userChosenAction);
 		group.add(agentChosenAction);
@@ -44,11 +46,23 @@ public class MenuBar extends JMenuBar {
 
 		newAction.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
+				mainClass.motivationalSphere.MotivationalSphereToNull();
 				mainClass.dialog.clearTextArea();
+				mainClass.dialog.getTextField().setEditable(true);
+				mainClass.dialog.firstSentence();
 			}
 		});
+		
+		exitAction.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				mainClass.dialog.getFrame().dispose();
+				
+			}
+		});
+		
 		saveAction.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
+				if(!isEmpty(mainClass.dialog.getTextAreaText())){
 				int returnVal = fc.showSaveDialog(new FileChooserDemo());
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 					File file = fc.getSelectedFile();
@@ -60,7 +74,7 @@ public class MenuBar extends JMenuBar {
 						e.printStackTrace();
 					}
 				}
-			}
+			}}
 		});
 		
 		manualAction.addActionListener(new ActionListener() {
@@ -90,5 +104,8 @@ public class MenuBar extends JMenuBar {
 		editMenu.add(agentChosenAction);
 		// editMenu.addSeparator();
 		viewMenu.add(manualAction);
+	}
+	public static boolean isEmpty(String str) {
+		return str == null || str.length() == 0;
 	}
 }

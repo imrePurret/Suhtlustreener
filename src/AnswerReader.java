@@ -3,6 +3,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,11 +12,12 @@ public class AnswerReader {
 	List<Answer> answerList = new ArrayList<Answer>();
 	
 	public AnswerReader() {
-		File file = new File("resources/vastused");
+		InputStream file = getClass().getResourceAsStream("vastused");
 		StringBuffer contents = new StringBuffer();
 		BufferedReader reader = null;
+	    InputStreamReader isr = new InputStreamReader(file);
 		try {
-			reader = new BufferedReader(new FileReader(file));
+			reader = new BufferedReader(isr);
 			String text = null;
 			// repeat until all lines is read
 			while ((text = reader.readLine()) != null) {
@@ -22,7 +25,6 @@ public class AnswerReader {
 						System.getProperty("line.separator"));
 				String[] info = text.split(";");
 				Answer answer = new Answer(info[0], Integer.parseInt(info[1]));
-				System.out.println(answer);
 				answerList.add(answer);
 			}
 		} catch (FileNotFoundException e) {

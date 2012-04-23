@@ -1,2 +1,9 @@
-[Mm]aits ple 1
-[Mm]õnu ple 2
+[Mm]aits;ple;1
+[Mm]õnu;ple;2
+[^(ei)]*[Tt]aimetoit[^(ei)]*odav;res;3
+Kas sa oleksid nõus taimetoitlaseks hakkama\?;non;10000
+[Tt]ervisele.*hea;use;4
+[Tt]ervisele.*kasulik;use;4
+[Tt]aimetoit.*kasulik;use;4
+[Tt]aimetoit.*ei.*odav;non;5
+ei.*[Tt]aimetoit.*odav;non;5

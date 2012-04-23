@@ -3,6 +3,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,17 +12,18 @@ public class InformationReader {
 	List<Information> informationList = new ArrayList<Information>();
 	
 	public InformationReader() {
-		File file = new File("resources/informatsioon");
+		InputStream file = getClass().getResourceAsStream("informatsioon");
 		StringBuffer contents = new StringBuffer();
 		BufferedReader reader = null;
+	    InputStreamReader isr = new InputStreamReader(file);
 		try {
-			reader = new BufferedReader(new FileReader(file));
+			reader = new BufferedReader(isr);
 			String text = null;
 			// repeat until all lines is read
 			while ((text = reader.readLine()) != null) {
 				contents.append(text).append(
 						System.getProperty("line.separator"));
-				String[] info = text.split(" ");
+				String[] info = text.split(";");
 				Information information = new Information(info[0], info[1], Integer.parseInt(info[2]));
 				informationList.add(information);
 			}

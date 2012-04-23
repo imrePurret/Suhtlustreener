@@ -25,6 +25,16 @@ public class MotivationalSphere {
 	public MotivationalSphere() {
 	}
 
+	public void MotivationalSphereToNull(){
+		this.resources = 0;
+		this.pleasant = 0;
+		this.unpleasant = 0;
+		this.useful = 0;
+		this.harmful = 0;
+		this.mandatory = 0;
+		this.prohibited = 0;
+		this.penalty = 0;
+	}
 
 	public int getResources() {
 		return resources;
