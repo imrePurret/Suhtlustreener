@@ -6,19 +6,21 @@ public class MotivationalSphere {
 	private int useful; //use
 	private int harmful; //har
 	private int mandatory; //man
+	private int penaltyNeg; //pen
+	private int penaltyPos; //pep
 	private int prohibited; //pro
-	private int penalty; //pen
 	
 	
-	public MotivationalSphere(int resources, int pleasant, int unpleasant, int useful, int harmful, int mandatory, int prohibited, int penalty){
+	public MotivationalSphere(int resources, int pleasant, int unpleasant, int useful, int harmful, int mandatory, int penaltyNeg, int penaltyPos, int prohibited){
 		this.resources = resources;
 		this.pleasant = pleasant;
 		this.unpleasant = unpleasant;
 		this.useful = useful;
 		this.harmful = harmful;
 		this.mandatory = mandatory;
+		this.penaltyNeg = penaltyNeg;
+		this.penaltyPos = penaltyPos;
 		this.prohibited = prohibited;
-		this.penalty = penalty;
 	}
 
 
@@ -32,8 +34,9 @@ public class MotivationalSphere {
 		this.useful = 0;
 		this.harmful = 0;
 		this.mandatory = 0;
+		this.penaltyNeg = 0;
+		this.penaltyPos = 0;
 		this.prohibited = 0;
-		this.penalty = 0;
 	}
 
 	public int getResources() {
@@ -96,6 +99,27 @@ public class MotivationalSphere {
 	}
 
 
+
+	public int getPenaltyNeg() {
+		return penaltyNeg;
+	}
+
+
+	public void setPenaltyNeg(int penaltyNeg) {
+		this.penaltyNeg = penaltyNeg;
+	}
+
+
+	public int getPenaltyPos() {
+		return penaltyPos;
+	}
+
+
+	public void setPenaltyPos(int penaltyPos) {
+		this.penaltyPos = penaltyPos;
+	}
+
+
 	public int getProhibited() {
 		return prohibited;
 	}
@@ -105,22 +129,13 @@ public class MotivationalSphere {
 		this.prohibited = prohibited;
 	}
 
-
-	public int getPenalty() {
-		return penalty;
-	}
-
-
-	public void setPenalty(int penalty) {
-		this.penalty = penalty;
-	}
-
-
 	@Override
 	public String toString() {
-		return "motivationalSphere [resources=" + resources + ", pleasant="
+		return "MotivationalSphere [resources=" + resources + ", pleasant="
 				+ pleasant + ", unpleasant=" + unpleasant + ", useful="
 				+ useful + ", harmful=" + harmful + ", mandatory=" + mandatory
-				+ ", prohibited=" + prohibited + ", penalty=" + penalty + "]";
+				+ ", penaltyNeg=" + penaltyNeg + ", penaltyPos=" + penaltyPos
+				+ ", prohibited=" + prohibited + "]";
 	}
+
 }

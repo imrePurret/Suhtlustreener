@@ -1,17 +1,11 @@
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Label;
-import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
+import java.util.Random;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -29,13 +23,18 @@ public class DialogInterface implements ActionListener {
 	private JTextArea textArea = new JTextArea(15, 50);
 	private JTextField textField2 = new JTextField(15);
 	private JTextPane textPane = new JTextPane();
+	private List<Answer> argumentList;
 	private final static String newline = "\n";
 	private JFrame frame;
 	private JPanel jPanel = new JPanel();
 	private JPanel jPanelManual = new JPanel();
+	private JMenuBar menu = new MenuBar();
 	private String userName;
 	private JPanel jPanelSouth;
 	private JLabel label;
+	private int starter;
+	private String tacticName;
+	private String[] tactics = {"veenmine", "ahvatlemine", "ahvardamine"};
 
 	public DialogInterface() {
 		frame = new JFrame("Suhtlustreener");
@@ -58,7 +57,6 @@ public class DialogInterface implements ActionListener {
 
 		textArea.setEditable(false);
 		JScrollPane scrollPane = new JScrollPane(textArea);
-		JMenuBar menu = new MenuBar();
 		menu.setVisible(true);
 		jPanel.add(menu, BorderLayout.NORTH);
 		jPanel.add(scrollPane, BorderLayout.CENTER);
@@ -88,7 +86,6 @@ public class DialogInterface implements ActionListener {
 		textPane.setMaximumSize(dim);
 		writeManual(textPane);
 		JScrollPane scrollPane = new JScrollPane(textPane);
-		JMenuBar menu = new MenuBar();
 		menu.setVisible(true);
 
 		jPanelManual.add(menu, BorderLayout.NORTH);
@@ -135,7 +132,14 @@ public class DialogInterface implements ActionListener {
 			jPanelManual.setVisible(false);
 			userName = textField2.getText();
 			frame.addNotify();
-			firstSentence();
+			if(MenuBar.userChosenAction.isSelected()){
+				firstSentence();
+				starter = 0;
+			}
+			else{
+				firstSentenceAgent();
+				starter = 1;
+			}
 			MenuBar.userChosenAction.setText(textField2.getText());
 		} else if (!isEmpty(textField.getText())) {
 			String text = textField.getText();
@@ -148,8 +152,24 @@ public class DialogInterface implements ActionListener {
 			} catch (InterruptedException exep) {
 				exep.printStackTrace();
 			}
-			new ConversationAgent().scales(text);
+			if(starter==0){
+				new ConversationAgent().scales(text);				
+			}
+			if(starter==1){
+				new ConversationAgent().tactic(text);				
+			}
 		}
+	}
+
+	public void firstSentenceAgent() {
+		Random generator = new Random();
+		int r = generator.nextInt(tactics.length);
+		this.setTacticName(tactics[r]);
+		setArgumentList(tacticName);
+		String text = "Kas sa oleksid nõus taimetoitlaseks hakkama? ";
+		textArea.append("Agent : " + text + newline);
+		//new ConversationAgent().tactic(text);
+		
 	}
 
 	public void firstSentence() {
@@ -204,6 +224,14 @@ public class DialogInterface implements ActionListener {
 		this.textField = textField;
 	}
 
+	public List<Answer> getArgumentList() {
+		return argumentList;
+	}
+
+	public void setArgumentList(String argumentList) {
+		this.argumentList = new AnswerReader(argumentList).getAnswerList();
+	}
+
 	public JTextArea getTextArea() {
 		return textArea;
 	}
@@ -219,4 +247,21 @@ public class DialogInterface implements ActionListener {
 	public void setFrame(JFrame frame) {
 		this.frame = frame;
 	}
+
+	public int getStarter() {
+		return starter;
+	}
+
+	public void setStarter(int starter) {
+		this.starter = starter;
+	}
+	
+	public String getTacticName() {
+		return tacticName;
+	}
+
+	public void setTacticName(String tacticName) {
+		this.tacticName = tacticName;
+	}
+
 }

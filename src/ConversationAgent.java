@@ -4,23 +4,23 @@ import javax.swing.JOptionPane;
 
 public class ConversationAgent {
 	MotivationalSphere motivationalSphere = mainClass.motivationalSphere;
-	
+
 	public ConversationAgent() {
 
 	}
 
 	public void scales(String hinnatav) {
-		List<Information> informationList = new InformationReader()
+		List<Information> informationList = new InformationReader("informatsioon")
 				.getInformationList();
-		List<Answer> answerList = new AnswerReader().getAnswerList();
-		List<String> zeroAnswers = new ArrayList();
-		List<String> winAnswers = new ArrayList();
+		List<Answer> answerList = new AnswerReader("vastused").getAnswerList();
+		List<String> zeroAnswers = new ArrayList<String>();
+		List<String> winAnswers = new ArrayList<String>();
 		int value = 0;
 		for (Information information : informationList) {
-			if (hinnatav.matches(".*(^| )" + information.getKeyWord() + ".{0,4}( |$).*")) {
-				System.out.println(information.getKeyWord());
+			if (hinnatav.matches(".*(^| )" + information.getKeyWord()
+					+ ".?( |$).*")) {
 				value++;
-				List<String> answers = new ArrayList();
+				List<String> answers = new ArrayList<String>();
 				for (Answer answer : answerList) {
 					if (answer.getAnswerIndex() == information.getAnswerIndex()) {
 						answers.add(answer.getAnswer());
@@ -30,7 +30,6 @@ public class ConversationAgent {
 				if (procedureWish(motivationalSphere)
 						|| procedureNeed(motivationalSphere)
 						|| procedureMust(motivationalSphere)) {
-					System.out.println("Soov võitis!");
 					for (Answer answer : answerList) {
 						if (answer.getAnswerIndex() == 9999) {
 							winAnswers.add(answer.getAnswer());
@@ -43,7 +42,6 @@ public class ConversationAgent {
 				}
 			}
 			if (value > 0) {
-				System.out.println(motivationalSphere);
 				break;
 			}
 			for (Answer answer : answerList) {
@@ -52,7 +50,6 @@ public class ConversationAgent {
 				}
 			}
 		}
-		System.out.println(value);
 		if (zeroAnswers.size() > 0 && value == 0) {
 			answering(zeroAnswers);
 		}
@@ -63,12 +60,77 @@ public class ConversationAgent {
 					.showMessageDialog(
 							null,
 							"Teil õnnestus arvutit veenda taimetoitlaseks hakkama!\n"
-									+ "Uue mängu alustamiseks valige menüüst alustaja ja seejärel "
+									+ "Uue dialoogi alustamiseks valige menüüst alustaja ja seejärel "
 									+ "\"Üldine\" ja \"Uus\".", "Õnnitlus!", 1);
 		}
 
 	}
 
+	public void tactic(String hinnatav) {
+		List<Information> informationList = new InformationReader("taktikasisend")
+				.getInformationList();
+		System.out.println(mainClass.dialog.getTacticName());
+		List<String> zeroAnswers = new ArrayList<String>();
+		List<String> winAnswers = new ArrayList<String>();
+		int value = 0;
+		for (Information information : informationList) {
+			if (hinnatav.matches(".*(^| )" + information.getKeyWord()
+					+ ".?( |$).*")) {
+				value++;
+				List<String> answers = new ArrayList<String>();
+				for (Answer answer : mainClass.dialog.getArgumentList()) {
+					if (answer.getAnswerIndex() == information.getAnswerIndex()) {
+						answers.add(answer.getAnswer());
+					}
+				}
+				renewMotivationalSphere(information.getSphereClass());
+				if (procedureWish(motivationalSphere)
+						|| procedureNeed(motivationalSphere)
+						|| procedureMust(motivationalSphere) || information.getAnswerIndex()==9999) {
+					for (Answer answer : mainClass.dialog.getArgumentList()) {
+						if (answer.getAnswerIndex() == 9999) {
+							winAnswers.add(answer.getAnswer());
+						}
+					}
+					break;
+				}
+				if (!answering(answers)) {
+					value = 0;
+				}
+			}
+			if (value > 0) {
+				break;
+			}
+			for (Answer answer : mainClass.dialog.getArgumentList()) {
+				if (answer.getAnswerIndex() == 0) {
+					zeroAnswers.add(answer.getAnswer());
+				}
+			}
+		}
+		if (zeroAnswers.size() > 0 && value == 0) {
+			answering(zeroAnswers);
+		} else if(value == 0){
+			mainClass.dialog.getTextField().setEditable(false);
+			JOptionPane
+					.showMessageDialog(
+							null,
+							"Dialoog Teie ja agendi vahel on lõppenud! Kahju, et Teid veenda ei õnnestunud!\n"
+									+ "Uue dialoogi alustamiseks valige menüüst alustaja ja seejärel "
+									+ "\"Üldine\" ja \"Uus\".", "Dialoogi lõpp", 1);
+		}
+		if (winAnswers.size() > 0) {
+			answering(winAnswers);
+			mainClass.dialog.getTextField().setEditable(false);
+			JOptionPane
+					.showMessageDialog(
+							null,
+							"Dialoog Teie ja agendi vahel on lõppenud! Tore, et otsustasite taimetoidu kasuks!\n"
+									+ "Uue dialoogi alustamiseks valige menüüst alustaja ja seejärel "
+									+ "\"Üldine\" ja \"Uus\".", "Dialoogi lõpp", 1);
+		}
+
+	}
+	
 	private void renewMotivationalSphere(String sphereClass) {
 		if ("res".equals(sphereClass)) {
 			motivationalSphere.setResources(1);
@@ -92,7 +154,10 @@ public class ConversationAgent {
 			motivationalSphere.setProhibited(1);
 		}
 		if ("pen".equals(sphereClass)) {
-			motivationalSphere.setPenalty(1);
+			motivationalSphere.setPenaltyNeg(1);
+		}
+		if ("pep".equals(sphereClass)) {
+			motivationalSphere.setPenaltyPos(1);
 		}
 
 	}
@@ -102,11 +167,18 @@ public class ConversationAgent {
 			Random generator = new Random();
 			int r = generator.nextInt(answers.size());
 			mainClass.dialog.addTextToTextArea(answers.get(r));
+			if (mainClass.dialog.getArgumentList() != null) {
+				for (Answer argument : mainClass.dialog.getArgumentList()) {
+					if (argument.getAnswer().equals(answers.get(r))) {
+						mainClass.dialog.getArgumentList().remove(argument);
+						break;
+					}
+				}
+			}
 			return true;
 		}
 		return false;
 	}
-
 	// Pleasant is bigger than unpleasant.
 	public boolean procedureWish(MotivationalSphere motSphere) {
 		if (motSphere.getPleasant() > motSphere.getUnpleasant()) {
@@ -117,56 +189,48 @@ public class ConversationAgent {
 					+ motSphere.getHarmful()) {
 				if (motSphere.getProhibited() == 0) {
 					return true;
-				} else {
-					if (motSphere.getPleasant() > motSphere.getUnpleasant()
-							+ motSphere.getHarmful() + motSphere.getPenalty()) {
-						return true;
-					}
-					if (motSphere.getPleasant() + motSphere.getUseful() > motSphere
-							.getUnpleasant()
-							+ motSphere.getHarmful()
-							+ motSphere.getPenalty()) {
-						return true;
-					} else {
-						return false;
-					}
 				}
-			} else {
+				if (motSphere.getPleasant() > motSphere.getUnpleasant()
+						+ motSphere.getHarmful() + motSphere.getPenaltyNeg()) {
+					return true;
+				}
 				if (motSphere.getPleasant() + motSphere.getUseful() > motSphere
-						.getUnpleasant() + motSphere.getHarmful()) {
-					if (motSphere.getProhibited() == 0) {
-						return true;
-					} else {
-						if (motSphere.getPleasant() + motSphere.getUseful() > motSphere
-								.getUnpleasant()
-								+ motSphere.getHarmful()
-								+ motSphere.getPenalty()) {
-							return true;
-						} else {
-							return false;
-						}
-					}
-				} else {
-					if (motSphere.getMandatory() == 0) {
-						return true;
-					} else {
-						if (motSphere.getPleasant() + motSphere.getUseful() + 1
-								- motSphere.getPenalty() > motSphere
-								.getHarmful() + motSphere.getPenalty()) {
-							return true;
-						} else {
-							return false;
-						}
-					}
+						.getUnpleasant()
+						+ motSphere.getHarmful()
+						+ motSphere.getPenaltyNeg()) {
+					return true;
 				}
+				return false;
 			}
+			if (motSphere.getPleasant() + motSphere.getUseful() > motSphere
+					.getUnpleasant() + motSphere.getHarmful()) {
+				if (motSphere.getProhibited() == 0) {
+					return true;
+				}
+				if (motSphere.getPleasant() + motSphere.getUseful() > motSphere
+						.getUnpleasant()
+						+ motSphere.getHarmful()
+						+ motSphere.getPenaltyNeg()) {
+					return true;
+				}
+				return false;
+			}
+			if (motSphere.getMandatory() == 0) {
+				return true;
+			}
+			if (motSphere.getPleasant() + motSphere.getUseful()
+					+ motSphere.getPenaltyPos() > motSphere.getHarmful()
+					+ motSphere.getUnpleasant()) {
+				return true;
+			}
+			return false;
 		}
 		return false;
 	}
 
 	// Useful is bigger than harmful.
 	public boolean procedureNeed(MotivationalSphere motShpere) {
-		if (!(motShpere.getUseful()>motShpere.getHarmful())){
+		if (!(motShpere.getUseful() > motShpere.getHarmful())) {
 			return false;
 		}
 		if (motShpere.getResources() == 0) {
@@ -179,59 +243,53 @@ public class ConversationAgent {
 			if (motShpere.getPleasant() + motShpere.getUseful() > motShpere
 					.getUnpleasant()
 					+ motShpere.getHarmful()
-					+ motShpere.getPenalty()) {
-				return true;
-			} else {
-				return false;
-			}
-		} else {
-			if (motShpere.getMandatory() == 0) {
+					+ motShpere.getPenaltyNeg()) {
 				return true;
 			}
-			if (motShpere.getPleasant() + motShpere.getUseful() + 1
-					- motShpere.getPenalty() > motShpere.getUnpleasant()
-					+ motShpere.getHarmful()) {
-				return true;
-			} else {
-				return false;
-			}
+			return false;
 		}
+		if (motShpere.getMandatory() == 0) {
+			return true;
+		}
+		if (motShpere.getPleasant() + motShpere.getUseful()
+				+ motShpere.getPenaltyPos() > motShpere.getUnpleasant()
+				+ motShpere.getHarmful()) {
+			return true;
+		}
+		return false;
 	}
 
 	// Activity is mandatory.
 	public boolean procedureMust(MotivationalSphere motShpere) {
-		if(motShpere.getMandatory()==0){
+		if (motShpere.getMandatory() == 0) {
 			return false;
 		}
 		if (motShpere.getResources() == 0) {
 			return false;
 		}
 		if (motShpere.getPleasant() > motShpere.getUnpleasant()) {
-			if (motShpere.getPleasant() + 1 - motShpere.getPenalty() > motShpere
+			if (motShpere.getPleasant() + motShpere.getPenaltyPos() > motShpere
 					.getUnpleasant() + motShpere.getHarmful()) {
 				return true;
 			}
-			if (motShpere.getPleasant() + motShpere.getUseful() + 1
-					- motShpere.getPenalty() > motShpere.getUnpleasant()
+			if (motShpere.getPleasant() + motShpere.getUseful()
+					+ motShpere.getPenaltyPos() > motShpere.getUnpleasant()
 					+ motShpere.getHarmful()) {
 				return true;
-			} else {
-				return false;
 			}
+			return false;
 
-		} else {
-			if (motShpere.getPleasant() + motShpere.getUseful() + 1
-					- motShpere.getPenalty() > motShpere.getUnpleasant()) {
-				return true;
-			}
-			if (motShpere.getPleasant() + motShpere.getUseful() + 1
-					- motShpere.getPenalty() > motShpere.getUnpleasant()
-					+ motShpere.getHarmful()) {
-				return true;
-			} else {
-				return false;
-			}
 		}
+		if (motShpere.getPleasant() + motShpere.getUseful()
+				+ motShpere.getPenaltyPos() > motShpere.getUnpleasant()) {
+			return true;
+		}
+		if (motShpere.getPleasant() + motShpere.getUseful()
+				+ motShpere.getPenaltyPos() > motShpere.getUnpleasant()
+				+ motShpere.getHarmful()) {
+			return true;
+		}
+		return false;
 	}
 
 }

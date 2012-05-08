@@ -8,23 +8,27 @@ import java.io.IOException;
 import java.io.Writer;
 
 import javax.swing.ButtonGroup;
-import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JRadioButtonMenuItem;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class MenuBar extends JMenuBar {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	final JFileChooser fc = new JFileChooser();
 	static JRadioButtonMenuItem userChosenAction;
 
 	public MenuBar() {
 
-		JMenuBar menuBar = new JMenuBar();
+		new JMenuBar();
 
 		JMenu fileMenu = new JMenu("Üldine");
 		JMenu editMenu = new JMenu("Alustaja");
@@ -49,7 +53,14 @@ public class MenuBar extends JMenuBar {
 				mainClass.motivationalSphere.MotivationalSphereToNull();
 				mainClass.dialog.clearTextArea();
 				mainClass.dialog.getTextField().setEditable(true);
-				mainClass.dialog.firstSentence();
+				if(MenuBar.userChosenAction.isSelected()){
+					mainClass.dialog.firstSentence();
+					mainClass.dialog.setStarter(0);
+				}
+				else{
+					mainClass.dialog.firstSentenceAgent();
+					mainClass.dialog.setStarter(1);
+				}
 			}
 		});
 		
@@ -62,11 +73,19 @@ public class MenuBar extends JMenuBar {
 		
 		saveAction.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
+				FileNameExtensionFilter filter = new FileNameExtensionFilter(
+				        ".txt files", "txt");
+				FileFilter fileFilter = fc.getFileFilter();
+				fc.removeChoosableFileFilter(fileFilter);
+				fc.setFileFilter(filter);
 				if(!isEmpty(mainClass.dialog.getTextAreaText())){
 				int returnVal = fc.showSaveDialog(new FileChooserDemo());
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 					File file = fc.getSelectedFile();
 					try {
+						if(!file.getName().matches(".*.txt$")){
+							file = new File(file+".txt");
+						}
 						Writer output = new BufferedWriter(new FileWriter(file));
 						output.write(mainClass.dialog.getTextAreaText());
 						output.close();

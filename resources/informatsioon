@@ -1,5 +1,5 @@
-[Mm]aits;ple;1
-[Mm]õnu;ple;2
+[Mm]aits.{0,4};ple;1
+[Mm]õnu.{0,4};ple;2
 [^(ei)]*[Tt]aimetoit[^(ei)]*odav;res;3
 Kas sa oleksid nõus taimetoitlaseks hakkama\?;non;10000
 [Tt]ervisele.*hea;use;4

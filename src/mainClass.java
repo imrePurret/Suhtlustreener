@@ -1,5 +1,3 @@
-import java.util.Random;
-
 
 public class mainClass {
 	static DialogInterface dialog;

@@ -1,6 +1,4 @@
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,8 +9,8 @@ import java.util.List;
 public class AnswerReader {
 	List<Answer> answerList = new ArrayList<Answer>();
 	
-	public AnswerReader() {
-		InputStream file = getClass().getResourceAsStream("vastused");
+	public AnswerReader(String answersSource) {
+		InputStream file = getClass().getResourceAsStream(answersSource);
 		StringBuffer contents = new StringBuffer();
 		BufferedReader reader = null;
 	    InputStreamReader isr = new InputStreamReader(file);
