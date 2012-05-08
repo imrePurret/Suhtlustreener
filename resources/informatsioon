@@ -1,9 +1,56 @@
-[Mm]aits.{0,4};ple;1
+[^(ei)]*[Tt]aimetoit[^(ei)]*[Mm]aits.{0,4}[^(ei)]*;ple;1
+[^(ei)]*[Tt]aimne toit[^(ei)]*[Mm]aits.{0,4}[^(ei)]*;ple;1
+[^(ei)]*[Vv]egetaarne toit[^(ei)]*[Mm]aits.{0,4}[^(ei)]*;ple;1
 [Mm]õnu.{0,4};ple;2
-[^(ei)]*[Tt]aimetoit[^(ei)]*odav;res;3
+[^(ei)]*[Tt]aimetoit[^(ei)]*odav.{0,3};res;3
+[^(ei)]*[Tt]aimne toit[^(ei)]*odav.{0,3};res;3
 Kas sa oleksid nõus taimetoitlaseks hakkama\?;non;10000
 [Tt]ervisele.*hea;use;4
 [Tt]ervisele.*kasulik;use;4
 [Tt]aimetoit.*kasulik;use;4
 [Tt]aimetoit.*ei.*odav;non;5
-ei.*[Tt]aimetoit.*odav;non;5
+[Tt]aimne toit.*kasulik;use;4
+[Tt]aimne toit.*ei.*odav;non;5
+ei.*[Tt]aimetoit.*odav.{0,3};non;5
+[Oo]le.? .*kunagi üritanud;non;6
+[Kk]unagi üritanud ole.?;non;6
+[Ll]iha.? .*palju kolesterooli;use;7
+[Ll]iha .*rikub .*tervis.?;pen;8
+[Rr]äägin.{0,2} ju;non;9
+[Ll]ooma .*tapmi.{0,3};unp;10
+[Vv]egetaarne toit[^(ei)]*parim.*profülaktika;use;11
+[Tt]aimetoit[^(ei)]*parim.*profülaktika;use;11
+[Vv]egetaarne[^(ei)]*parim.*profülaktika;use;11
+[Tt]aimne toit[^(ei)]*parim.*profülaktika;use;11
+[Oo]le vait;non;12
+[Pp]aks.*ei.*pea.{0,2} .*liha;use;13
+[Tt]aimetoit .*vähe .*kaloreid;use;14
+[Tt]aimne toit .*vähe .*kaloreid;use;14
+[Vv]egetaarne toit .*vähe .*kaloreid;use;14
+[Tt]aimetoit .*palju .*kiudaineid;use;15
+[Tt]aimne toit .*palju .*kiudaineid;use;15
+[Vv]egetaarne toit .*palju .*kiudaineid;use;15
+[Tt]aimed .*maitsvad;ple;1
+[Vv]ähe[^(ei)]*kaloreid;use;14
+[Ee]i soovi;non;16
+[Ee]i söö snitslit;non;17
+[Mm]a olen taimetoitlane;non;18
+[Ee]i .*taha;non;20
+[Kk]äi perse;non;21
+[Ii]me lahti;non;21
+[Pp]alju .*vitamiine;use;28
+[Ee]i soovi, aitäh;non;22
+[Kk]õht .*täis;non;23
+[Tt]aimed .*vaheldus;non;24
+[Ii]se .*kasvatada;res;25
+[Ll]iha.* seedub raskesti;ple;29
+[Ll]iha on paha;non;30
+[Ee]i taha;non;26
+[Ee]listan taimetoitu;non;31
+[Ee]listan taimset toitu;non;31
+[Tt]aimetoit hea;non;31
+[Tt]aimne toit hea;non;31
+[Tt]aimetoit tervislik;non;31
+[Tt]aimne toit tervislik;non;31
+[Mm]iks;non;27
+[0-9]*;non;19

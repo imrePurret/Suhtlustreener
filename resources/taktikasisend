@@ -1,4 +1,4 @@
 [Mm]aits.{0,4};ple;1
 Kas sa oleksid nõus taimetoitlaseks hakkama\?;non;10000
 [Oo]lgu,( ma)? hakkan;non;9999
-[Oo]lgu hakkan;non;9999
+[Oo]lgu .*hakkan;non;9999

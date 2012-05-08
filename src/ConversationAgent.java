@@ -18,7 +18,7 @@ public class ConversationAgent {
 		int value = 0;
 		for (Information information : informationList) {
 			if (hinnatav.matches(".*(^| )" + information.getKeyWord()
-					+ ".?( |$).*")) {
+					+ ".{0,3}( |$).*")) {
 				value++;
 				List<String> answers = new ArrayList<String>();
 				for (Answer answer : answerList) {
@@ -75,7 +75,7 @@ public class ConversationAgent {
 		int value = 0;
 		for (Information information : informationList) {
 			if (hinnatav.matches(".*(^| )" + information.getKeyWord()
-					+ ".?( |$).*")) {
+					+ ".{0,3}( |$).*")) {
 				value++;
 				List<String> answers = new ArrayList<String>();
 				for (Answer answer : mainClass.dialog.getArgumentList()) {
